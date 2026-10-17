@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-intro compact-intro">
+  <div class="eyebrow"><span class="eyebrow-line"></span> TOOL 02 <span class="eyebrow-divider">/</span> PASSWORD REVIEW</div>
+  <h1>Analyze <span class="text-accent">password.</span></h1>
+  <p class="page-lead">Review length, recognizable patterns, repetition, and common-password risks. Analysis runs in this browser; your password is not submitted to Flask.</p>
+</section>
+<section class="feature-layout analyzer-layout">
+  <article class="panel feature-panel">
+    <div class="panel-heading"><div><span class="panel-kicker">LOCAL STRENGTH ANALYSIS</span><h2>Review a password</h2></div><span class="status-badge status-available"><span></span> Browser-local</span></div>
+    <form id="analyzer-form" autocomplete="off" onsubmit="return false;">
+      <label class="field-label" for="analysis-password">Password to analyze</label>
+      <div class="analyzer-input-row">
+        <input class="text-input analyzer-password-input" id="analysis-password" name="password" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="analysis-privacy-note" placeholder="Enter a password to analyze">
+        <button class="button button-secondary" id="analysis-visibility" type="button" aria-pressed="false" aria-label="Show password">Show</button>
+      </div>
+      <div class="analyzer-actions">
+        <button class="button button-primary" type="submit">Analyze password <span aria-hidden="true">→</span></button>
+        <button class="button button-secondary" id="analysis-clear" type="button">Clear</button>
+      </div>
+    </form>
+    <p class="field-help" id="analysis-privacy-note">The password is analyzed in your browser only. It is not sent to the server, stored, or copied automatically.</p>
+    <div id="analysis-results" class="analysis-results" hidden aria-live="polite" aria-atomic="true">
+      <div class="analysis-score-row">
+        <div><span class="panel-kicker">ESTIMATED STRENGTH</span><h2 id="analysis-rating">Very Weak</h2></div>
+        <div class="score-number"><strong id="analysis-score">0</strong><span>/100</span></div>
+      </div>
+      <div class="strength-track" role="meter" aria-label="Estimated password strength" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="analysis-meter"><span id="analysis-meter-fill"></span></div>
+      <div class="analysis-stats">
+        <div class="analysis-stat"><span>Length</span><strong id="analysis-length">0</strong></div>
+        <div class="analysis-stat"><span>Unique characters</span><strong id="analysis-unique">0</strong></div>
+        <div class="analysis-stat"><span>Character groups</span><strong id="analysis-groups">0/4</strong></div>
+      </div>
+      <div class="analysis-findings-grid">
+        <section><h3>Weaknesses</h3><ul id="analysis-weaknesses" class="analysis-list"></ul></section>
+        <section><h3>Positive indicators</h3><ul id="analysis-positives" class="analysis-list"></ul></section>
+      </div>
+      <section class="analysis-recommendations"><h3>Recommended next steps</h3><ul id="analysis-recommendations" class="analysis-list"></ul></section>
+    </div>
+    <p class="analyzer-disclaimer">This heuristic estimate is not a guarantee of security. It does not identify every name, date, breach exposure, or attacker-specific guess.</p>
+  </article>
+  <aside class="panel side-panel">
+    <div class="panel-heading"><div><span class="panel-kicker">WHAT WE REVIEW</span><h2>Patterns matter more than decoration</h2></div></div>
+    <ul class="feature-list">
+      <li><span class="list-check">01</span><div><strong>Length and variety</strong><p>Length, unique characters, and character categories.</p></div></li>
+      <li><span class="list-check">02</span><div><strong>Predictable patterns</strong><p>Common passwords, sequences, keyboard walks, and substitutions.</p></div></li>
+      <li><span class="list-check">03</span><div><strong>Repetition</strong><p>Repeated characters and repeated substrings.</p></div></li>
+      <li><span class="list-check">04</span><div><strong>Practical guidance</strong><p>Specific suggestions to improve the password without overpromising.</p></div></li>
+    </ul>
+    <div class="notice notice-info"><span aria-hidden="true">i</span><p><strong>Privacy by design.</strong> The analysis script runs locally in the page. A compromised device or browser extension can still expose what you type.</p></div>
+  </aside>
+</section>
+{% endblock %}

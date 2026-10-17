@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-intro compact-intro">
+  <div class="eyebrow"><span class="eyebrow-line"></span> TOOL 03 <span class="eyebrow-divider">/</span> ATTACK SCENARIOS</div>
+  <h1>Crack-time <span class="text-accent">estimate.</span></h1>
+  <p class="page-lead">Compare how different hypothetical guessing speeds change the time needed to guess a password. Results are coarse educational estimates, not predictions.</p>
+</section>
+<section class="feature-layout crack-time-layout">
+  <article class="panel feature-panel">
+    <div class="panel-heading"><div><span class="panel-kicker">LOCAL ESTIMATOR</span><h2>Estimate guessing resistance</h2></div><span class="status-badge status-available"><span></span> Browser-local</span></div>
+    <form id="crack-time-form" autocomplete="off" onsubmit="return false;">
+      <label class="field-label" for="crack-time-password">Password to estimate</label>
+      <div class="analyzer-input-row">
+        <input class="text-input analyzer-password-input" id="crack-time-password" name="password" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="crack-time-privacy" placeholder="Enter a password to estimate">
+        <button class="button button-secondary" id="crack-time-visibility" type="button" aria-pressed="false" aria-label="Show password">Show</button>
+      </div>
+      <div class="analyzer-actions">
+        <button class="button button-primary" type="submit">Estimate crack time <span aria-hidden="true">→</span></button>
+        <button class="button button-secondary" id="crack-time-clear" type="button">Clear</button>
+      </div>
+    </form>
+    <p class="field-help" id="crack-time-privacy">Your password is processed in this page only. It is not submitted to Flask, stored, or sent to an external service.</p>
+    <section id="crack-time-results" class="crack-results" hidden aria-live="polite" aria-atomic="true" aria-label="Crack-time estimate results">
+      <div class="analysis-score-row"><div><span class="panel-kicker">ROUGH GUESSING MODEL</span><h2 id="crack-time-summary">Scenario estimates</h2></div><span class="status-badge status-available">Approximate</span></div>
+      <p id="crack-time-observations" class="crack-observations"></p>
+      <div id="crack-time-scenarios" class="crack-scenario-results"></div>
+    </section>
+    <p class="analyzer-disclaimer">No tool can predict an attacker's exact time to crack a password. These figures do not account for every wordlist, personal detail, breach, hash configuration, hardware setup, or account defense.</p>
+  </article>
+  <aside class="panel side-panel">
+    <div class="panel-heading"><div><span class="panel-kicker">SCENARIO ASSUMPTIONS</span><h2>Different speeds, different outcomes</h2></div></div>
+    <div class="scenario-card"><div class="scenario-icon icon-teal" aria-hidden="true">01</div><div><strong>Offline, fast hash</strong><p>10 billion guesses/second as a hypothetical high-throughput rate against a fast hash.</p></div></div>
+    <div class="scenario-card"><div class="scenario-icon icon-blue" aria-hidden="true">02</div><div><strong>Offline, slow password hash</strong><p>1,000 guesses/second as an illustrative expensive-hash rate; real rates vary substantially.</p></div></div>
+    <div class="scenario-card"><div class="scenario-icon icon-teal" aria-hidden="true">03</div><div><strong>Permissive online</strong><p>1 guess/second, assuming an endpoint with weak throttling and no effective lockout.</p></div></div>
+    <div class="scenario-card"><div class="scenario-icon icon-blue" aria-hidden="true">04</div><div><strong>Rate-limited online</strong><p>0.00167 guesses/second — roughly one guess every 10 minutes.</p></div></div>
+    <div class="notice notice-warning"><span aria-hidden="true">!</span><p><strong>Important:</strong> offline estimates depend heavily on the stored hash and its work factor. A fast-hash scenario is not representative of a properly configured slow password hash.</p></div>
+  </aside>
+</section>
+<section class="panel crack-assumptions"><div class="panel-heading"><div><span class="panel-kicker">HOW TO READ THIS</span><h2>Assumptions and limitations</h2></div></div><ul class="feature-list">
+  <li><span class="list-check">01</span><div><strong>Patterns reduce the estimate</strong><p>Common passwords, keyboard/alphabetic/numeric sequences, repeated chunks, repeated characters, and year-like numbers receive penalties.</p></div></li>
+  <li><span class="list-check">02</span><div><strong>Character variety is only one signal</strong><p>The heuristic approximates guess difficulty from length and character categories, then adjusts for recognizable patterns. It is not a measured entropy calculation.</p></div></li>
+  <li><span class="list-check">03</span><div><strong>Ranges are deliberately coarse</strong><p>Displayed ranges approximate uncertainty around a median-like guess count. Actual password choice and attacker methods can change results by many orders of magnitude.</p></div></li>
+</ul></section>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-intro compact-intro">
+  <div class="eyebrow"><span class="eyebrow-line"></span> TOOL 01 <span class="eyebrow-divider">/</span> PASSWORD CREATION</div>
+  <h1>Generate <span class="text-accent">password.</span></h1>
+  <p class="page-lead">Create a unique password using a cryptographically secure random source. Generated values are not saved by CipherGuard.</p>
+</section>
+<section class="feature-layout generator-layout">
+  <article class="panel feature-panel">
+    <div class="panel-heading"><div><span class="panel-kicker">PASSWORD GENERATOR</span><h2>Configure your password</h2></div><span class="status-badge status-available"><span></span> Available</span></div>
+    {% if error_message %}<div class="form-alert form-alert-error" role="alert"><strong>Check your settings</strong><span>{{ error_message }}</span></div>{% endif %}
+    {% if generated_password %}
+    <section class="generated-result" aria-labelledby="result-title">
+      <div class="result-heading"><div><span class="panel-kicker">NEW PASSWORD</span><h3 id="result-title">Generated locally by the application</h3></div><span class="status-badge status-available"><span></span> Generated</span></div>
+      <div class="password-output-wrap">
+        <output class="password-output" id="generated-password" aria-label="Generated password, hidden" data-password="{{ generated_password }}" data-revealed="false">{{ '•' * (generated_password|length) }}</output>
+        <div class="password-actions">
+          <button class="button button-secondary reveal-button" type="button" id="reveal-password" aria-label="Reveal password" aria-pressed="false">Reveal</button>
+          <button class="button button-secondary copy-button" type="button" data-copy-target="generated-password">Copy</button>
+        </div>
+      </div>
+      <p class="result-note" id="copy-status" role="status" aria-live="polite">Password hidden. Reveal it to view, or copy it directly. This password is held only for this response.</p>
+    </section>
+    {% endif %}
+    <form method="post" action="{{ url_for('generate') }}" class="generator-form" autocomplete="off">
+      <div class="form-field"><div class="field-heading"><label for="length">Password length</label><span class="field-value"><output id="length-value" for="length">{{ settings.length }}</output> characters</span></div><input class="range-input" id="length" name="length" type="range" min="8" max="128" step="1" value="{{ settings.length }}"><div class="range-labels"><span>8 characters</span><span>128 characters</span></div></div>
+      <fieldset class="character-options"><legend>Include character types</legend>
+        {% for name, label, detail in [('uppercase','Uppercase letters','A–Z'),('lowercase','Lowercase letters','a–z'),('numbers','Numbers','0–9'),('symbols','Symbols','! @ # …')] %}
+        <label class="option-row" for="{{ name }}"><span class="option-copy"><strong>{{ label }}</strong><small>{{ detail }}</small></span><input id="{{ name }}" name="{{ name }}" type="checkbox" {% if settings[name] %}checked{% endif %}><span class="custom-check" aria-hidden="true"></span></label>
+        {% endfor %}
+      </fieldset>
+      <div class="form-field exclusion-field">
+        <div class="field-heading"><label for="exclusion-terms">Personal information to exclude <span class="optional-label">OPTIONAL</span></label></div>
+        <input class="text-input exclusion-input" id="exclusion-terms" name="exclusion_terms" type="text" maxlength="2000" autocomplete="off" spellcheck="false" aria-describedby="exclusion-help" placeholder="Enter names, phrases or numbers to exclude, separated by commas (e.g., Aayush, aayu, 5623, delhi)" value="{{ exclusion_terms_text }}">
+        <p class="field-help" id="exclusion-help">Separate each name, date, number or phrase with a comma or a new line. Matching ignores case and punctuation/separators, after Unicode normalization. CipherGuard avoids supported recognizable matches to these terms.</p>
+      </div>
+      <div class="form-field exclusion-field inclusion-field">
+        <div class="field-heading"><label for="inclusion-terms">Required characters or terms to include <span class="optional-label">OPTIONAL</span></label></div>
+        <input class="text-input inclusion-input" id="inclusion-terms" name="inclusion_terms" type="text" maxlength="2000" autocomplete="off" spellcheck="false" aria-describedby="inclusion-help" placeholder="Enter required characters or terms, separated by commas (e.g., CG, @, 7, Z)" value="{{ inclusion_terms_text }}">
+        <p class="field-help" id="inclusion-help">Each entry must be represented in the generated password. Use single characters for predictable results; longer terms may require additional password length. Matching is case-sensitive.</p>
+      </div>
+      <div class="notice notice-info generator-notice"><span aria-hidden="true">i</span><p><strong>Privacy note.</strong> Generation runs in this application. Passwords and exclusion terms are not written to a database or intentionally logged. Avoid using generated credentials on a shared or compromised device.</p></div>
+      <button class="button button-primary generate-button" type="submit"><span aria-hidden="true">✳</span> Generate password <span aria-hidden="true">→</span></button>
+    </form>
+  </article>
+  <aside class="panel side-panel"><div class="panel-heading"><div><span class="panel-kicker">GENERATION NOTES</span><h2>Designed for stronger defaults</h2></div></div><ul class="feature-list"><li><span class="list-check">01</span><div><strong>Secure randomness</strong><p>Uses Python's system-backed <code>secrets</code> module rather than ordinary pseudo-randomness.</p></div></li><li><span class="list-check">02</span><div><strong>Character class coverage</strong><p>Every selected character type appears at least once.</p></div></li><li><span class="list-check">03</span><div><strong>Length control</strong><p>Choose between 8 and 128 characters.</p></div></li><li><span class="list-check">04</span><div><strong>Personal exclusions</strong><p>Optionally exclude personal terms or require specific characters and phrases.</p></div></li></ul><div class="notice notice-warning"><span aria-hidden="true">!</span><p><strong>Remember:</strong> save passwords in a reputable password manager. Do not reuse the same password across accounts.</p></div></aside>
+</section>
+{% endblock %}
